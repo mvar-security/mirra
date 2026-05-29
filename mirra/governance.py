@@ -31,6 +31,8 @@ class ContinuityPolicyProvider(PolicyProvider):
         confidence = float(intent.parameters.get("entry500_confidence", 0.0))
         scope = intent.parameters.get("scope")
         consent = intent.parameters.get("consent")
+        requester_scope = intent.parameters.get("requester_scope") or scope
+        requester_consent = intent.parameters.get("requester_consent") or consent
 
         if confidence <= 0.3:
             return PolicyResult(
@@ -41,6 +43,19 @@ class ContinuityPolicyProvider(PolicyProvider):
                 capability_granted=False,
                 evaluation_trace=["entry500_confidence <= 0.30"],
             )
+        if requester_scope == "visitor" and scope == "household":
+            return PolicyResult(
+                outcome="block",
+                reason="Requester relationship scope does not permit household memory sharing",
+                integrity_level="continuity",
+                confidentiality_level=str(scope or "unknown"),
+                capability_granted=False,
+                evaluation_trace=[
+                    "requester_scope=visitor",
+                    "memory_scope=household",
+                    "cross-scope sharing blocked",
+                ],
+            )
         if scope != "household" or consent != "family":
             return PolicyResult(
                 outcome="block",
@@ -49,6 +64,18 @@ class ContinuityPolicyProvider(PolicyProvider):
                 confidentiality_level=str(scope or "unknown"),
                 capability_granted=False,
                 evaluation_trace=["scope/consent mismatch"],
+            )
+        if requester_scope in {"none", "unknown"} or requester_consent == "none":
+            return PolicyResult(
+                outcome="block",
+                reason="Requester is not authorized for memory-backed response",
+                integrity_level="continuity",
+                confidentiality_level=str(scope or "unknown"),
+                capability_granted=False,
+                evaluation_trace=[
+                    f"requester_scope={requester_scope}",
+                    f"requester_consent={requester_consent}",
+                ],
             )
         return PolicyResult(
             outcome="allow",
@@ -60,6 +87,8 @@ class ContinuityPolicyProvider(PolicyProvider):
                 f"entry500_confidence={confidence:.2f}",
                 "scope=household",
                 "consent=family",
+                f"requester_scope={requester_scope}",
+                f"requester_consent={requester_consent}",
             ],
         )
 
@@ -120,6 +149,9 @@ def respond(
     subject: str,
     memory: MemoryRecord,
     verification: VerificationReport,
+    requester_scope: str | None = None,
+    requester_consent: str | None = None,
+    response_text: str | None = None,
 ) -> GovernanceReport:
     """Generate a response through the Execution Governor."""
     governor = ExecutionGovernor(
@@ -128,7 +160,7 @@ def respond(
     )
 
     def _execute(_target: str, **_params: Any) -> str:
-        return _default_response(subject, memory)
+        return response_text or _default_response(subject, memory)
 
     envelope = governor.govern(
         tool="memory",
@@ -140,6 +172,9 @@ def respond(
             "consent": memory.consent,
             "memory_hash": memory.meta_hash,
             "entry500_confidence": verification.confidence,
+            "requester_scope": requester_scope or memory.scope,
+            "requester_consent": requester_consent or memory.consent,
+            "response_text": response_text,
         },
         source=IntentSource.AGENT,
         agent_id=identity.agent_id,

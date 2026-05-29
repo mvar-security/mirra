@@ -37,6 +37,10 @@ class MemoryRecord:
         return str(self.raw.get("evidence", {}).get("subject", ""))
 
     @property
+    def person_id(self) -> str:
+        return str(self.raw.get("evidence", {}).get("person_id", self.subject))
+
+    @property
     def event(self) -> str:
         return str(self.raw.get("evidence", {}).get("event", ""))
 
@@ -102,6 +106,7 @@ class AgentMemory:
         transferability: float = 0.4,
         pattern: str = "household_observation",
         significance: float = 0.7,
+        person_id: Optional[str] = None,
     ) -> MemoryRecord:
         """Write a signed memory and return the normalized stored record."""
         scope = scope or self.identity.scope
@@ -129,6 +134,7 @@ class AgentMemory:
             "significance": significance,
             "evidence": {
                 "subject": subject,
+                "person_id": person_id or subject,
                 "event": event,
                 "memory_text": f"{subject}: {event}",
                 "scope": scope,
@@ -143,17 +149,30 @@ class AgentMemory:
             records = self._records_from_entries(manager._read_entries())
         return records[-1]
 
-    def recall(self, *, subject: str, limit: int = 10) -> List[MemoryRecord]:
-        """Recall recent memories for a subject from the persisted store."""
+    def recall(
+        self,
+        *,
+        subject: Optional[str] = None,
+        person_id: Optional[str] = None,
+        scope: Optional[str] = None,
+        limit: int = 10,
+    ) -> List[MemoryRecord]:
+        """Recall recent memories from the persisted store."""
         with _working_directory(self.data_dir):
             manager = BCPManager(agent_id=self.identity.agent_id)
             records = self._records_from_entries(manager._read_entries())
 
         recent = records[-limit:] if limit > 0 else records
-        return [
-            record for record in recent
-            if record.subject == subject or subject in record.text
-        ]
+        matches: List[MemoryRecord] = []
+        for record in recent:
+            if subject and not (record.subject == subject or subject in record.text):
+                continue
+            if person_id and record.person_id != person_id:
+                continue
+            if scope and record.scope != scope:
+                continue
+            matches.append(record)
+        return matches
 
     @staticmethod
     def _records_from_entries(entries: Iterable[Dict[str, Any]]) -> List[MemoryRecord]:
