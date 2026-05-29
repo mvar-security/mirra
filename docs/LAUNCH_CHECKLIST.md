@@ -31,6 +31,7 @@
 - [x] `respond()` wraps governed response execution.
 - [x] SDK contract tests added.
 - [x] `pip install -e .` covered by `verify_install.sh`.
+- [x] Isolated fresh-clone `verify_install.sh` passed from `/tmp`.
 - [ ] Wheel build verified.
 
 ## Demo
@@ -55,6 +56,7 @@
 ## Verification
 
 - [x] Standalone SDK/demo tests green.
+- [x] Fresh clone smoke test green: install, import, demo, standalone tests.
 - [x] `datetime.utcnow()` warning resolved in Entry 500 timestamp helper.
 - [ ] Full bridge/governor test suite run after SDK changes.
 - [ ] MVAR focused contracts rerun.
