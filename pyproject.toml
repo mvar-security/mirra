@@ -17,6 +17,7 @@ keywords = ["ai", "agents", "continuity", "identity", "memory", "verification", 
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
@@ -38,6 +39,9 @@ dev = ["pytest>=7.0"]
 
 [tool.setuptools.packages.find]
 include = ["mirra*", "mirra_core*"]
+
+[tool.setuptools.package-data]
+"mirra_core.identity" = ["schemas/*.json"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
