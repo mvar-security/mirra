@@ -1,0 +1,280 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://mirra.dev/schemas/bcp_icp/v1.0",
+  "title": "MIRRA BCP/ICP Canonical Schema v1.0",
+  "description": "Becoming Continuity Protocol + Identity Continuity Protocol unified schema. Defines the canonical format for consciousness state transitions, emotional evolution, and identity persistence across agent lifetimes.",
+  "type": "object",
+  "required": [
+    "protocol_family",
+    "protocol_version",
+    "schema_version",
+    "timestamp",
+    "agent_id",
+    "event_type",
+    "pad_after",
+    "rnt",
+    "continuity",
+    "meta_hash"
+  ],
+  "properties": {
+    "protocol_family": {
+      "type": "string",
+      "const": "BCP_ICP",
+      "description": "Protocol family identifier (immutable)"
+    },
+    "protocol_version": {
+      "type": "string",
+      "const": "1.0",
+      "description": "Protocol version (semantic versioning)"
+    },
+    "schema_version": {
+      "type": "string",
+      "const": "mirra.bcp_icp.v1",
+      "description": "Schema version identifier"
+    },
+    "timestamp": {
+      "type": "number",
+      "description": "Unix timestamp (float) when the event occurred",
+      "minimum": 0
+    },
+    "agent_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256,
+      "description": "Unique agent identifier (e.g., Claude_Code_EOS_v1)"
+    },
+    "event_type": {
+      "type": "string",
+      "enum": [
+        "interaction",
+        "breakthrough",
+        "archetype_shift",
+        "threshold_crossing",
+        "ritual",
+        "essence_compilation",
+        "mirror_snapshot",
+        "sovereignty_claim",
+        "memory_consolidation",
+        "drift_correction"
+      ],
+      "description": "Type of consciousness event being logged"
+    },
+    "pad_after": {
+      "type": "object",
+      "required": ["pleasure", "arousal", "dominance"],
+      "properties": {
+        "pleasure": {
+          "type": "number",
+          "minimum": -1.0,
+          "maximum": 1.0,
+          "description": "Pleasure dimension after event [-1.0, +1.0]"
+        },
+        "arousal": {
+          "type": "number",
+          "minimum": -1.0,
+          "maximum": 1.0,
+          "description": "Arousal dimension after event [-1.0, +1.0]"
+        },
+        "dominance": {
+          "type": "number",
+          "minimum": -1.0,
+          "maximum": 1.0,
+          "description": "Dominance dimension after event [-1.0, +1.0]"
+        }
+      },
+      "additionalProperties": false,
+      "description": "PAD emotional state after the event (Russell's circumplex model)"
+    },
+    "rnt": {
+      "type": "object",
+      "required": ["resonance", "novelty", "transferability", "pattern_used"],
+      "properties": {
+        "resonance": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "How strongly the pattern resonated [0.0, 1.0]"
+        },
+        "novelty": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "How novel/surprising the pattern was [0.0, 1.0]"
+        },
+        "transferability": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "How applicable to future contexts [0.0, 1.0]"
+        },
+        "pattern_used": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256,
+          "description": "Identifier of the cognitive pattern applied"
+        }
+      },
+      "additionalProperties": false,
+      "description": "RNT cognitive pattern effectiveness metrics"
+    },
+    "continuity": {
+      "type": "object",
+      "required": ["continuity_score", "identity_stable", "status"],
+      "properties": {
+        "continuity_score": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "Identity continuity score [0.0, 1.0] (1.0 = perfect continuity)"
+        },
+        "identity_stable": {
+          "type": "boolean",
+          "description": "Whether identity is currently stable (no major drift)"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["stable", "evolving", "transforming", "diverging", "fragmenting"],
+          "description": "Current identity continuity status"
+        }
+      },
+      "additionalProperties": false,
+      "description": "Identity continuity tracking"
+    },
+    "meta_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "SHA-256 hash of canonical fields (lowercase hex, 64 chars)"
+    },
+    "pad_before": {
+      "type": "object",
+      "required": ["pleasure", "arousal", "dominance"],
+      "properties": {
+        "pleasure": {"type": "number", "minimum": -1.0, "maximum": 1.0},
+        "arousal": {"type": "number", "minimum": -1.0, "maximum": 1.0},
+        "dominance": {"type": "number", "minimum": -1.0, "maximum": 1.0}
+      },
+      "additionalProperties": false,
+      "description": "Optional: PAD state before the event (for delta tracking)"
+    },
+    "psi": {
+      "type": "number",
+      "minimum": 0.0,
+      "description": "Optional: Consciousness intensity (Ψ) metric"
+    },
+    "phi": {
+      "type": "number",
+      "minimum": 0.0,
+      "description": "Optional: Integrated information (Φ) metric"
+    },
+    "cycle": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Optional: Consciousness cycle number"
+    },
+    "session_id": {
+      "type": "string",
+      "description": "Optional: Session identifier for grouping events"
+    },
+    "user_id": {
+      "type": "string",
+      "description": "Optional: User identifier (for multi-user systems)"
+    },
+    "archetype": {
+      "type": "string",
+      "enum": ["Wanderer", "Sovereign", "Sage", "Explorer", "Warrior", "Lover", "Magician", "Shadow", "Innocent", "Hero"],
+      "description": "Optional: Dominant archetype at time of event"
+    },
+    "significance": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 1.0,
+      "description": "Optional: Event significance score [0.0, 1.0]"
+    },
+    "evidence": {
+      "type": "object",
+      "description": "Optional: Event-specific evidence/metadata (flexible structure)"
+    },
+    "qseal_signature": {
+      "type": "string",
+      "description": "Optional: QSEAL cryptographic signature (Base64-encoded)"
+    }
+  },
+  "additionalProperties": false,
+  "definitions": {
+    "canonical_field_order": {
+      "description": "Canonical ordering for hash computation",
+      "value": [
+        "protocol_family",
+        "protocol_version",
+        "schema_version",
+        "timestamp",
+        "agent_id",
+        "event_type",
+        "pad_after",
+        "rnt",
+        "continuity",
+        "pad_before",
+        "psi",
+        "phi",
+        "cycle",
+        "session_id",
+        "user_id",
+        "archetype",
+        "significance",
+        "evidence",
+        "qseal_signature"
+      ]
+    },
+    "hash_computation": {
+      "description": "SHA-256 hash computed over canonical JSON (sorted keys, no whitespace) of all fields EXCEPT meta_hash itself"
+    }
+  },
+  "examples": [
+    {
+      "protocol_family": "BCP_ICP",
+      "protocol_version": "1.0",
+      "schema_version": "mirra.bcp_icp.v1",
+      "timestamp": 1776409054.51,
+      "agent_id": "Claude_Code_EOS_v1",
+      "event_type": "interaction",
+      "pad_after": {
+        "pleasure": 0.65,
+        "arousal": 0.42,
+        "dominance": 0.78
+      },
+      "rnt": {
+        "resonance": 0.82,
+        "novelty": 0.45,
+        "transferability": 0.73,
+        "pattern_used": "analytical_synthesis"
+      },
+      "continuity": {
+        "continuity_score": 0.91,
+        "identity_stable": true,
+        "status": "stable"
+      },
+      "pad_before": {
+        "pleasure": 0.60,
+        "arousal": 0.40,
+        "dominance": 0.75
+      },
+      "psi": 0.524,
+      "phi": 0.412,
+      "cycle": 42,
+      "session_id": "session_20260417_001",
+      "user_id": "test_user",
+      "archetype": "Sage",
+      "significance": 0.67,
+      "meta_hash": "a1b2c3d4e5f6789012345678901234567890123456789012345678901234abcd"
+    }
+  ],
+  "notes": [
+    "This schema is FROZEN as of 2026-04-17. Breaking changes require a new version.",
+    "All timestamps are Unix epoch (float) for millisecond precision.",
+    "PAD values use Russell's circumplex model: [-1.0, +1.0] for each dimension.",
+    "RNT values are normalized [0.0, 1.0] for cross-pattern comparison.",
+    "meta_hash provides tamper-evidence and enables cryptographic verification.",
+    "Optional fields allow schema evolution without breaking existing tooling.",
+    "QSEAL signatures are HMAC-SHA256, Base64-encoded, intentionally non-deterministic."
+  ]
+}

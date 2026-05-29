@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mirra"
+version = "0.1.0"
+description = "Continuity substrate for AI agents — persistent identity, trusted memory, verification, and governed action."
+readme = "README.md"
+license = "Apache-2.0"
+requires-python = ">=3.9"
+dependencies = ["jsonschema>=4.0"]
+authors = [
+    { name = "Shawn Cohen", email = "shawn@universalmediaus.com" },
+]
+keywords = ["ai", "agents", "continuity", "identity", "memory", "verification", "governance"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Security :: Cryptography",
+]
+
+[project.urls]
+Homepage = "https://github.com/mvar-security/mirra"
+Documentation = "https://github.com/mvar-security/mirra/blob/main/docs/MIRRA_SDK_QUICKSTART.md"
+Repository = "https://github.com/mvar-security/mirra"
+Issues = "https://github.com/mvar-security/mirra/issues"
+
+[project.optional-dependencies]
+dev = ["pytest>=7.0"]
+
+[tool.setuptools.packages.find]
+include = ["mirra*", "mirra_core*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
