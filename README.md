@@ -1,12 +1,12 @@
 # MIRRA — Continuity Substrate for AI Agents
 
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
-[![Tests](https://img.shields.io/badge/tests-12%2F12%20passing-green)]()
+[![Tests](https://img.shields.io/badge/tests-20%2F20%20passing-green)]()
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue)](LICENSE)
 
-Every AI agent today starts from zero. No memory of what happened yesterday. No identity that persists across sessions. No way to prove what it knew, when it knew it, or why it acted.
+Every AI agent today starts from zero. No memory of what happened yesterday. No identity that persists across sessions. No relationship boundary between Jack, Elaine, and a dinner guest. No way to prove what it knew, when it knew it, or why it acted.
 
-MIRRA fixes that. It gives agents persistent identity, trusted memory, and governed action — with a cryptographic proof chain from memory through verification to response.
+MIRRA fixes that. It gives governed agents relationship-aware continuity: persistent identity, signed memory, scoped recall, verification, governed response, and a cryptographic proof chain from memory through action.
 
 ```python
 from mirra import AgentMemory, Identity, respond, verify
@@ -33,6 +33,8 @@ response = agent.interact(speaker="jack", input="I'm home!")
 
 No model changes. No framework migration. MIRRA gives the agent continuity underneath.
 
+MIRRA is integration-first. Your governance stack controls what agents can do. MIRRA controls what they can remember, share, and prove.
+
 [Why this matters](docs/MANIFESTO.md) | [SDK Quickstart](docs/MIRRA_SDK_QUICKSTART.md)
 
 ---
@@ -48,6 +50,7 @@ export QSEAL_SECRET=$(openssl rand -hex 32)
 python examples/continuity_demo/home_robot.py
 python examples/household_demo/household.py
 python examples/wrapper_demo/wrap_existing_agent.py
+python examples/governed_agent_stack/stack.py
 ```
 
 ## Run Tests
@@ -81,6 +84,13 @@ The household demo adds the relationship layer:
 - Visitor session state is expired after the visit.
 - Jack's memory and relationship tone persist into the next day.
 
+The governed stack demo adds the enterprise composition:
+
+- An external policy perimeter allows ordinary chat.
+- MIRRA provides relationship memory and verification inside that perimeter.
+- MIRRA blocks cross-scope memory sharing to a visitor.
+- The external perimeter blocks destructive actions before the agent executes.
+
 ---
 
 ## API Surface
@@ -111,6 +121,16 @@ The household demo adds the relationship layer:
 | Verification | `verify()` | Entry 500 epistemic verification with confidence scoring |
 | Governance | `respond()` | Execution Governor enforces scope, consent, and trust policy |
 | Provenance | `MemoryRecord.proof_id` | End-to-end hash chain from memory through governance |
+
+## Integration Positioning
+
+MIRRA does not replace agent frameworks or governance tools. It composes with them.
+
+```text
+External governance perimeter -> MIRRA continuity layer -> Existing agent/model
+```
+
+Use your existing model, voice stack, agent framework, and policy gateway. MIRRA adds the missing continuity layer: who the agent is, who it is talking to, what it may remember, what it may share, and how it proves the chain.
 
 ---
 
