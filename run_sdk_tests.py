@@ -387,6 +387,25 @@ def t_wrapper_demo_output():
         assert "Evidence Hash:" in result.stdout
 test("wrap_existing_agent.py proves one-line continuity wrapper", t_wrapper_demo_output)
 
+def t_governed_stack_demo_output():
+    with tempfile.TemporaryDirectory() as tmp:
+        env = dict(os.environ)
+        env["MIRRA_GOVERNED_STACK_DEMO_DATA"] = str(Path(tmp) / "stack_data")
+        env["PYTHONPATH"] = str(Path(__file__).parent)
+        result = subprocess.run(
+            [sys.executable, str(Path(__file__).parent / "examples" / "governed_agent_stack" / "stack.py")],
+            capture_output=True, text=True, timeout=30, env=env,
+        )
+        assert result.returncode == 0, f"Governed stack demo failed:\n{result.stderr}"
+        assert "MIRRA Governed Agent Stack" in result.stdout
+        assert "Perimeter Decision: allowed" in result.stdout
+        assert "MIRRA Outcome: executed" in result.stdout
+        assert "MIRRA Outcome: blocked" in result.stdout
+        assert "Requester relationship scope does not permit household memory sharing" in result.stdout
+        assert "Perimeter Decision: blocked" in result.stdout
+        assert "perimeter governs actions; MIRRA governs memory" in result.stdout
+test("governed stack demo composes perimeter policy with MIRRA continuity", t_governed_stack_demo_output)
+
 # ── Results ─────────────────────────────────────────────────────────
 
 print()
